@@ -8,6 +8,6 @@ class TriageTests(unittest.TestCase):
   raw=b'From: CEO <ceo@example.com>\nReply-To: pay@evil.test\nAuthentication-Results: mx; spf=fail; dkim=fail; dmarc=fail\nMIME-Version: 1.0\nContent-Type: application/octet-stream; name="invoice.pdf.exe"\nContent-Disposition: attachment; filename="invoice.pdf.exe"\nContent-Transfer-Encoding: base64\n\nWA=='
   r=analyze_bytes(raw)
   codes={x['code'] for x in r['findings']}
-  self.assertIn('DOUBLE_EXTENSION',codes); self.assertIn('REPLY_TO_MISMATCH',codes); self.assertEqual(r['verdict'],'high risk')
+  self.assertIn('DOUBLE_EXTENSION',codes); self.assertIn('REPLY_TO_MISMATCH',codes); self.assertEqual(r['verdict'],'높은 위험')
  def test_urls(self): self.assertEqual(domains_from_text('go https://example.com/a and http://1.2.3.4/x'),{'example.com','1.2.3.4'})
 if __name__=='__main__': unittest.main()
