@@ -1,40 +1,46 @@
-# Mail Threat Triage
+# 메일 위협 초기 분석기
 
-A local-first `.eml` triage tool for email-security support, incident response, QA, and sales demos. It uses only the Python standard library and never uploads message data.
+메일 보안 지원, 침해 대응, 품질보증(QA), 영업 데모에서 `.eml` 원본을 빠르게 점검하는 로컬 우선 도구입니다. Python 표준 라이브러리만 사용하며 메일 데이터를 외부로 전송하지 않습니다.
 
-## What it checks
+## 웹에서 바로 사용
 
-- SPF, DKIM, and DMARC results from `Authentication-Results`
-- From / Reply-To mismatch and suspicious display names
-- Executable, archive, and deceptive double-extension attachments
-- Attachment SHA-256, MIME type, and size
-- Punycode and raw-IP URL hosts
-- Received-hop presence and full-message SHA-256
-- A deterministic 0-100 risk score, JSON output, and a standalone HTML report
+**웹 분석기:** https://llxerll.github.io/mail-threat-triage/
 
-> This is a triage aid, not a replacement for DKIM cryptographic verification, sandboxing, URL reputation, or an email security gateway.
+`.eml` 파일을 끌어다 놓거나 선택하면 브라우저 안에서만 분석합니다. 서버 업로드가 없고, 분석이 끝난 뒤 HTML 보고서를 내려받을 수 있습니다.
 
-## Quick start
+## 점검 항목
 
-Requires Python 3.10+ and has no third-party dependencies.
+- `Authentication-Results`의 SPF, DKIM, DMARC 결과
+- From / Reply-To 불일치와 의심스러운 표시 이름
+- 실행 파일, 압축 파일, 이중 확장자 첨부파일
+- 첨부파일 이름과 형식
+- 퓨니코드 및 IP 주소형 URL 호스트
+- Received 경유 수와 메일 전체 SHA-256
+- 일관된 0~100 위험 점수, JSON 출력, 단독 HTML 보고서
+
+> 이 도구는 초기 분류를 돕습니다. DKIM 암호 검증, 샌드박스, URL 평판 조회, 메일 보안 게이트웨이를 대체하지 않습니다.
+
+## 명령줄에서 사용
+
+Python 3.10 이상이 필요하며 외부 패키지는 사용하지 않습니다.
 
 ```bash
-python mail_triage.py suspicious.eml
-python mail_triage.py suspicious.eml --format html -o report.html
+python mail_triage.py 의심메일.eml
+python mail_triage.py 의심메일.eml --format html -o 보고서.html
 ```
 
-Exit codes: `0` low risk, `1` suspicious, `2` high risk. This makes it easy to use in scripts and CI.
+종료 코드는 `0` 낮은 위험, `1` 의심, `2` 높은 위험입니다. 스크립트와 CI에서도 사용할 수 있습니다.
 
-## Test
+## 테스트
 
 ```bash
 python -m unittest -v test_mail_triage.py
 ```
 
-## Safe handling
+## 안전한 사용
 
-Run this on a copy of the message. Do not open extracted attachments. The tool hashes attachment bytes in memory but does not write or execute them.
+메일 복사본을 분석하세요. 추출된 첨부파일은 열지 마세요. 명령줄 도구는 첨부파일 바이트의 해시만 메모리에서 계산하며 저장하거나 실행하지 않습니다. 웹 분석기도 선택한 파일을 외부로 전송하지 않습니다.
 
-## License
+## 라이선스
 
 MIT
